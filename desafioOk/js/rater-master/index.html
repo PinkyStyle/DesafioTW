@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Example</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+    <script src="http://code.jquery.com/jquery-1.11.3.min.js" charset="utf-8"></script>
+    <script src="rater.js" charset="utf-8"></script>
+    <script>
+        $(document).ready(function(){
+            setTimeout(function(){
+                $("#rate6").rate({
+                    selected_symbol_type: 'fontawesome_star',
+                    max_value: 5,
+                    step_size: 0.25,
+                });
+            }, 2000);
+        });
+    </script>
+</head>
+<body>
+    <div id="rate6" class="fa-2x"></div>
+</body>
+</html>
