@@ -53,6 +53,8 @@
 				<th>Ingreso</th>
 				<th>Egreso</th>
 				<th>Saldo</th>
+				<th>Modificar</th>
+				<th>Eliminar</th>
 				<?php foreach($data as $row):?>
 				<tr>
 					<td><?=substr($row->fecha,0,10)?></td>
@@ -64,6 +66,12 @@
 					<?php else:?>
 					<td class="btn-danger"><?=number_format($row->saldo,0,",",".")?></td>
 					<?php endif;?>
+					<td>
+						<button class='btn btn-warning btn-sm' onclick='modificarRegistro(<?=$row->id?>)'>Editar</button>
+					</td>
+					<td>
+						<button class='btn btn-danger btn-sm'  onclick='eliminarRegistro(<?=$row->id?>)'>Eliminar</button>
+					</td>
 				</tr>
 				<?php endforeach;?>
 			</table>
@@ -263,9 +271,9 @@
 					var cadena ="";
 					for(var i =0;i<data.cant;i++){
 						if(data.data[i].saldo>0){
-							cadena+="<tr><td>"+(data.data[i].fecha).substring(0,10)+"</td><td>"+data.data[i].descripcion+"</td><td>"+data.data[i].ingreso+"</td><td>"+data.data[i].egreso+"</td><td class='btn-success'>"+data.data[i].saldo+"</td></tr>";
+							cadena+="<tr><td>"+(data.data[i].fecha).substring(0,10)+"</td><td>"+data.data[i].descripcion+"</td><td>"+data.data[i].ingreso+"</td><td>"+data.data[i].egreso+"</td><td class='btn-success'>"+data.data[i].saldo+"</td>"+"<td><button class='btn btn-warning btn-sm' onclick='modificarRegistro("+data.data[i].id+")'>Editar</button></td><td><button class='btn btn-danger btn-sm'  onclick='eliminarRegistro("+data.data[i].id+")'>Eliminar</button></td></tr>";
 						}else{
-							cadena+="<tr><td>"+(data.data[i].fecha).substring(0,10)+"</td><td>"+data.data[i].descripcion+"</td><td>"+data.data[i].ingreso+"</td><td>"+data.data[i].egreso+"</td><td class='btn-danger'>"+data.data[i].saldo+"</td></tr>";
+							cadena+="<tr><td>"+(data.data[i].fecha).substring(0,10)+"</td><td>"+data.data[i].descripcion+"</td><td>"+data.data[i].ingreso+"</td><td>"+data.data[i].egreso+"</td><td class='btn-danger'>"+data.data[i].saldo+"</td>"+"<td><button class='btn btn-warning btn-sm' onclick='modificarRegistro("+data.data[i].id+")'>Editar</button></td><td><button class='btn btn-danger btn-sm'  onclick='eliminarRegistro("+data.data[i].id+")'>Eliminar</button></td></tr>";
 						}
 					}
 					$("#idOculto").val(data.ultimo);
@@ -294,5 +302,87 @@
 	  		}
   		);*/
 	}
+
+	function modificarRegistro(id){
+		console.log(id);
+		/*
+		var descripcion = $("#descripcion").val();
+		var ingreso = ($("#ingreso").val().split(".")).join("");
+		var egreso = ($("#egreso").val().split(".")).join("");
+
+		var validation = {
+		    isEmailAddress:function(str) {
+		        var pattern =/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+		        return pattern.test(str);  // returns a boolean
+		    },
+		    isNotEmpty:function (str) {
+		        var pattern =/\S+/;
+		        return pattern.test(str);  // returns a boolean
+		    },
+		    isNumber:function(str) {
+		        var pattern = /^\d+$/;
+		        return pattern.test(str);  // returns a boolean
+		    },
+		    isText:function(str){
+		    	var pattern=/^[a-zA-Z ]*$/;
+		    	return pattern.test(str); // returns a boolean
+ 		    },
+ 		    isTelefono:function(str){
+ 		    	var pattern=/^[0-9+]+$/;
+ 		    	return pattern.test(str);
+ 		    },
+		    isSame:function(str1,str2){
+		        return str1 === str2;
+		    }
+		};
+		var fail = 0;
+		if(descripcion.length==0 && (ingreso.length == 0 || egreso.length == 0)){
+			alert("Debes regstrar Descripción e Ingreso o Egreso");
+			fail=1;
+		}
+		if(descripcion.length>0 && ingreso.length == 0 && egreso.length == 0){
+			alert("Falta registrar Ingreso o Egreso");
+			fail=1;
+		}
+		if(ingreso.length> 0 && egreso.length > 0){
+			alert("Solo puede ser Ingreso o Egreso!");
+			fail=1;
+		}
+
+		if(fail == 0){
+			$.post(base_url+"Principal/saveProcedimiento",{
+				descripcion:descripcion, ingreso:ingreso, egreso:egreso
+			},function(){
+				$("#contenedor").hide('fast');
+	  			nuevoProcedimiento();
+			});
+		}
+		*/
+	}
+
+	function eliminarRegistro(id){
+		console.log(id);
+		/*
+		$.post(
+			base_url+"Principal/traeMasRegistros",
+			{desde:$("#idOculto").val()},
+			function(data){
+				if(data.cant > 0){
+					var cadena ="";
+					for(var i =0;i<data.cant;i++){
+						if(data.data[i].saldo>0){
+							cadena+="<tr><td>"+(data.data[i].fecha).substring(0,10)+"</td><td>"+data.data[i].descripcion+"</td><td>"+data.data[i].ingreso+"</td><td>"+data.data[i].egreso+"</td><td class='btn-success'>"+data.data[i].saldo+"</td>"+"<td><button class='btn btn-warning btn-sm' onclick='modificarRegistro("+data.data[i].id+")'>Editar</button></td><td><button class='btn btn-danger btn-sm'  onclick='eliminarRegistro("+data.data[i].id+")'>Eliminar</button></td></tr>";
+						}else{
+							cadena+="<tr><td>"+(data.data[i].fecha).substring(0,10)+"</td><td>"+data.data[i].descripcion+"</td><td>"+data.data[i].ingreso+"</td><td>"+data.data[i].egreso+"</td><td class='btn-danger'>"+data.data[i].saldo+"</td>"+"<td><button class='btn btn-warning btn-sm' onclick='modificarRegistro("+data.data[i].id+")'>Editar</button></td><td><button class='btn btn-danger btn-sm'  onclick='eliminarRegistro("+data.data[i].id+")'>Eliminar</button></td></tr>";
+						}
+					}
+					$("#idOculto").val(data.ultimo);
+					$("#tablaRegistros").append(cadena);
+				}
+			},'json'
+		);
+		*/
+	}
+
 
 </script>
