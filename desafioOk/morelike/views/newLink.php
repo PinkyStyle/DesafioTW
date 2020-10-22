@@ -46,27 +46,26 @@
 				<tr>
 					<td>
 						<select class="form-control" placeholder="Usuario" aria-label="Usuario" id="nombre<?=$row->id?>">
-					  	<?php foreach($usuarios as $row1):?>
-					  		<?php if($row1->id == $row->idu):?>
-					  			<option selected value="<?=$row1->id?>"><?=$row1->nombre?></option>
-					  		<?php else:?>
-					  			<option value="<?=$row1->id?>"><?=$row1->nombre?></option>
-					  		<?php endif;?>
-					  	<?php endforeach;?>
-			  </select>
+							<?php foreach($usuarios as $row1):?>
+								<?php if($row1->id == $row->idu):?>
+									<option selected value="<?=$row1->id?>"><?=$row1->nombre?></option>
+								<?php else:?>
+									<option value="<?=$row1->id?>"><?=$row1->nombre?></option>
+								<?php endif;?>
+							<?php endforeach;?>
+						</select>
 					</td>
 					<td>
 						<select class="form-control" placeholder="Areas" aria-label="Areas" id="area<?=$row->id?>">
-					  	<?php foreach($areas as $row1):?>
-					  		<?php if($row1->id == $row->idc):?>
-					  			<option selected value="<?=$row1->id?>"><?=$row1->nombre?></option>
-					  		<?php else:?>
-					  			<option value="<?=$row1->id?>"><?=$row1->nombre?></option>
-				  			<?php endif;?>
-					  	<?php endforeach;?>
-			  </select>
-					</td>
-					
+							<?php foreach($areas as $row1):?>
+								<?php if($row1->id == $row->idc):?>
+									<option selected value="<?=$row1->id?>"><?=$row1->nombre?></option>
+								<?php else:?>
+									<option value="<?=$row1->id?>"><?=$row1->nombre?></option>
+								<?php endif;?>
+							<?php endforeach;?>
+						</select>
+					</td>					
 					<?php if($row->estadousce == 0):?>
 						<td><i class="far fa-eye fa-2x"></i></td>
 						<td><button class="btn btn-info" onclick="cambiarEstadoUA(1,<?=$row->idc?>)"><i class="far fa-eye-slash"></i></button></td>

@@ -4,6 +4,8 @@
 		<h3 class="text-center">Registros Contables</h3>
 	</div>
 	<div class="col-12 col-lg-12">
+
+		<!-- Labels -->
 		<div class="row">
 			<div class="col-4 text-center">
 				<h4>Descripción</h4>
@@ -15,6 +17,8 @@
 				<h4>Egreso</h4>	
 			</div>
 		</div>
+
+		<!-- Inputs Registros Contables -->
 		<div class="row">
 			<div class="col-4">
 				<input class="form-control" type="text" id="descripcion">
@@ -26,6 +30,8 @@
 				<input class="form-control" type="number" id="egreso" onchange="formato('egreso')">
 			</div>
 		</div>
+
+		<!-- Botones Guardar y Buscar -->
 		<div class="row">
 			<div class="col-6">
 				<button class="btn btn-success" style="width: 100%; margin-top: 10px;" onclick="guardarNuevoProcedimiento()">Guardar <i class="far fa-save"></i></button>
@@ -36,6 +42,8 @@
 			</div>
 		</div>
 	</div>
+
+	<!-- Seccion de Busqueda -->
 	<div class="col-12 col-lg-6" style="display: none" id="divBusqueda">
 		<fieldset>
 			<legend>Búsquedas</legend>
@@ -45,6 +53,7 @@
 			<input type="text" id="to" name="to">
 		</fieldset>
 	</div>
+
 	<?php if($cant > 0):?>
 		<div class="col-12 col-lg-12" id="ultimosRegistros">
 			<table class="table table-striped" id="tablaRegistros">
@@ -108,24 +117,24 @@
 <script type="text/javascript" src="js/rut.js"></script>
 <script type="text/javascript">
 	$(document).ready(function(){
-		 $.datepicker.regional['es'] = {
-			 closeText: 'Cerrar',
-			 prevText: '< Ant',
-			 nextText: 'Sig >',
-			 currentText: 'Hoy',
-			 monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-			 monthNamesShort: ['Ene','Feb','Mar','Abr', 'May','Jun','Jul','Ago','Sep', 'Oct','Nov','Dic'],
-			 dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
-			 dayNamesShort: ['Dom','Lun','Mar','Mié','Juv','Vie','Sáb'],
-			 dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sá'],
-			 weekHeader: 'Sm',
-			 dateFormat: 'yy-mm-dd',
-			 firstDay: 1,
-			 isRTL: false,
-			 showMonthAfterYear: false,
-			 yearSuffix: ''
-	 	};
-	 	$.datepicker.setDefaults($.datepicker.regional['es']);
+		$.datepicker.regional['es'] = {
+			closeText: 'Cerrar',
+			prevText: '< Ant',
+			nextText: 'Sig >',
+			currentText: 'Hoy',
+			monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+			monthNamesShort: ['Ene','Feb','Mar','Abr', 'May','Jun','Jul','Ago','Sep', 'Oct','Nov','Dic'],
+			dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+			dayNamesShort: ['Dom','Lun','Mar','Mié','Juv','Vie','Sáb'],
+			dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sá'],
+			weekHeader: 'Sm',
+			dateFormat: 'yy-mm-dd',
+			firstDay: 1,
+			isRTL: false,
+			showMonthAfterYear: false,
+			yearSuffix: ''
+		};
+	$.datepicker.setDefaults($.datepicker.regional['es']);
 	      from = $( "#from" )
 	        .datepicker({
 	          //defaultDate: "+1w",
