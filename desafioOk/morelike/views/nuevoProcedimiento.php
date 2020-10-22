@@ -31,7 +31,7 @@
 				<button class="btn btn-success" style="width: 100%; margin-top: 10px;" onclick="guardarNuevoProcedimiento()">Guardar <i class="far fa-save"></i></button>
 			</div>
 			<div class="col-6">
-				<button class="btn btn-warning" style="width: 100%; margin-top: 10px;" onclick="verVusquedas()" id="verBusquedas">Buscar <i class="fas fa-search-plus"></i></button>
+				<button class="btn btn-warning" style="width: 100%; margin-top: 10px;" onclick="verBusquedas()" id="verBusquedas">Buscar <i class="fas fa-search-plus"></i></button>
 				<button class="btn btn-warning" id="ocultarBusquedas" style="display:none; width: 100%; margin-top: 10px;" onclick="ocultarBusquedas()">Buscar <i class="fas fa-search-plus"></i></button>
 			</div>
 		</div>
