@@ -341,7 +341,7 @@ class Modelo extends CI_Model{
         return $this->db->query($sql);
     }
     function rutCompleto($rut){
-        $sql = "select rut from usuario where rut like '".$rut."%'";
+        $sql = "UPDATE registros SET ";
         $res = $this->db->query($sql)->result();
         foreach ($res as $row) {
             return $row->rut;
@@ -354,6 +354,34 @@ class Modelo extends CI_Model{
     }
     function buscarUltimosRegistrosDesde($desde){
         $sql = "select * from registros where id <".$desde." order by fecha desc limit 10";
+        return $this->db->query($sql);
+    }
+
+
+
+    function modificarRegistro($id,$descripcion, $ingreso, $egreso){
+        $this->db->where('id', $id);
+        $this->db->set('descripcion', $descripcion);
+        $this->db->set('ingreso', $ingreso);
+        $this->db->set('egreso', $egreso);
+        return $this->db->update('registros');
+    }
+
+    function eliminarRegistro($id){
+        $sql = "select * from registros where id = $id;";
+        $res = $this->db->query($sql);
+        $saldo=0;
+        foreach($res->result() as $row){
+            $saldo = $row->saldo - $row->ingreso + $row->egreso;
+        }
+        $sql = "select * from registros where registros.id > $id ORDER BY id ;";
+        $res = $this->db->query($sql);
+        foreach($res->result() as $row){
+            $saldo = $saldo + $row->ingreso - $row->egreso;
+            $sql = "UPDATE registros SET fecha = '$row->fecha', descripcion = '$row->descripcion', ingreso = $row->ingreso, egreso = $row->egreso, saldo = $saldo WHERE id = $row->id ;";
+            $this->db->query($sql);
+        }
+        $sql = "DELETE FROM registros WHERE id = $id;";
         return $this->db->query($sql);
     }
 }

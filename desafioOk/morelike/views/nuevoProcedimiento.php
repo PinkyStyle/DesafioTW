@@ -305,7 +305,7 @@
 
 	function modificarRegistro(id){
 		console.log(id);
-		/*
+		
 		var descripcion = $("#descripcion").val();
 		var ingreso = ($("#ingreso").val().split(".")).join("");
 		var egreso = ($("#egreso").val().split(".")).join("");
@@ -337,7 +337,7 @@
 		};
 		var fail = 0;
 		if(descripcion.length==0 && (ingreso.length == 0 || egreso.length == 0)){
-			alert("Debes regstrar Descripción e Ingreso o Egreso");
+			alert("Debes registrar Descripción e Ingreso o Egreso");
 			fail=1;
 		}
 		if(descripcion.length>0 && ingreso.length == 0 && egreso.length == 0){
@@ -350,38 +350,23 @@
 		}
 
 		if(fail == 0){
-			$.post(base_url+"Principal/saveProcedimiento",{
-				descripcion:descripcion, ingreso:ingreso, egreso:egreso
+			$.post(base_url+"Principal/modificarRegistro",{
+				id:id, descripcion:descripcion, ingreso:ingreso, egreso:egreso
 			},function(){
 				$("#contenedor").hide('fast');
 	  			nuevoProcedimiento();
 			});
 		}
-		*/
 	}
 
 	function eliminarRegistro(id){
 		console.log(id);
-		/*
-		$.post(
-			base_url+"Principal/traeMasRegistros",
-			{desde:$("#idOculto").val()},
-			function(data){
-				if(data.cant > 0){
-					var cadena ="";
-					for(var i =0;i<data.cant;i++){
-						if(data.data[i].saldo>0){
-							cadena+="<tr><td>"+(data.data[i].fecha).substring(0,10)+"</td><td>"+data.data[i].descripcion+"</td><td>"+data.data[i].ingreso+"</td><td>"+data.data[i].egreso+"</td><td class='btn-success'>"+data.data[i].saldo+"</td>"+"<td><button class='btn btn-warning btn-sm' onclick='modificarRegistro("+data.data[i].id+")'>Editar</button></td><td><button class='btn btn-danger btn-sm'  onclick='eliminarRegistro("+data.data[i].id+")'>Eliminar</button></td></tr>";
-						}else{
-							cadena+="<tr><td>"+(data.data[i].fecha).substring(0,10)+"</td><td>"+data.data[i].descripcion+"</td><td>"+data.data[i].ingreso+"</td><td>"+data.data[i].egreso+"</td><td class='btn-danger'>"+data.data[i].saldo+"</td>"+"<td><button class='btn btn-warning btn-sm' onclick='modificarRegistro("+data.data[i].id+")'>Editar</button></td><td><button class='btn btn-danger btn-sm'  onclick='eliminarRegistro("+data.data[i].id+")'>Eliminar</button></td></tr>";
-						}
-					}
-					$("#idOculto").val(data.ultimo);
-					$("#tablaRegistros").append(cadena);
-				}
-			},'json'
-		);
-		*/
+		$.post(base_url+"Principal/eliminarRegistro",{
+			id:id
+		},function(){
+			$("#contenedor").hide('fast');
+			nuevoProcedimiento();
+		});
 	}
 
 
