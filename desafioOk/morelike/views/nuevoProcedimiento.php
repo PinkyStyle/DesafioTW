@@ -76,7 +76,11 @@
 					<td class="btn-danger"><?=number_format($row->saldo,0,",",".")?></td>
 					<?php endif;?>
 					<td>
-						<button class='btn btn-warning btn-sm' onclick='modificarRegistro(<?=$row->id?>)'>Editar</button>
+						<button class='btn btn-warning btn-sm' data-toggle="modal" data-target="#modificarRegistro" 
+						data-id="<?=$row->id?>"
+						data-descripcion="<?=$row->descripcion?>" 
+						data-ingresos="<?=number_format($row->ingreso,0,",",".")?>" 
+						data-egresos="<?=number_format($row->egreso,0,",",".")?>">Editar</button>						
 					</td>
 					<td>
 						<button class='btn btn-danger btn-sm'  onclick='eliminarRegistro(<?=$row->id?>)'>Eliminar</button>
@@ -88,6 +92,40 @@
 			<button class="btn btn-info" onclick="addRegistros()" style="width: 100%; margin-top:5px;"><i class="fas fa-cloud-download-alt fa-2x"></i></button>
 		</div>
 	<?php endif;?>
+
+	<div class="modal fade" id="modificarRegistro" tabindex="-1" role="dialog" aria-labelledby="modificarRegistroLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="modificarRegistroLabel">Editar Registro</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form >				
+				<div class="form-group">
+					<input type="hidden" class="form-control" id="idR" >
+					<label for="recipient-descripcion" class="col-form-label">Descripcion:</label>
+					<input type="text" class="form-control" id="recipient-descripcion"  >
+				</div>
+				<div class="form-group">
+					<label for="recipient-ingreso" class="col-form-label">Ingresos:</label>
+					<input type="text" class="form-control" id="recipient-ingreso" >
+				</div>
+				<div class="form-group">
+					<label for="recipient-egreso" class="col-form-label">Egresos:</label>
+					<input type="text" class="form-control" id="recipient-egreso" >
+				</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				<input type="submit" class="btn btn-primary" onclick="modificarRegistro()"></button>
+			</div>
+			</div>
+		</div>
+	</div>
 	
 </div>
 <style type="text/css">
@@ -115,7 +153,9 @@
 	}
 </style>
 <script type="text/javascript" src="js/rut.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
 <script type="text/javascript">
+
 	$(document).ready(function(){
 		$.datepicker.regional['es'] = {
 			closeText: 'Cerrar',
@@ -134,36 +174,50 @@
 			showMonthAfterYear: false,
 			yearSuffix: ''
 		};
-	$.datepicker.setDefaults($.datepicker.regional['es']);
-	      from = $( "#from" )
-	        .datepicker({
-	          //defaultDate: "+1w",
-	          changeMonth: true,
-	          numberOfMonths: 1
-	        })
-	        .on( "change", function() {
-	          to.datepicker( "option", "minDate", getDate( this ) );
-	        }),
-	      to = $( "#to" ).datepicker({
-	        defaultDate: "+1w",
-	        changeMonth: true,
-	        numberOfMonths: 2
-	      })
-	      .on( "change", function() {
-	        from.datepicker( "option", "maxDate", getDate( this ) );
-	      });
-	 
-	    function getDate( element ) {
-	      var date;
-	      try {
-	        date = $.datepicker.parseDate( dateFormat, element.value );
-	      } catch( error ) {
-	        date = null;
-	      }
-	 
-	      return date;
-	    }
+		$.datepicker.setDefaults($.datepicker.regional['es']);
+			from = $( "#from" )
+				.datepicker({
+				//defaultDate: "+1w",
+				changeMonth: true,
+				numberOfMonths: 1
+				})
+				.on( "change", function() {
+				to.datepicker( "option", "minDate", getDate( this ) );
+				}),
+			to = $( "#to" ).datepicker({
+				defaultDate: "+1w",
+				changeMonth: true,
+				numberOfMonths: 2
+			})
+			.on( "change", function() {
+				from.datepicker( "option", "maxDate", getDate( this ) );
+			});
+		
+			function getDate( element ) {
+			var date;
+			try {
+				date = $.datepicker.parseDate( dateFormat, element.value );
+			} catch( error ) {
+				date = null;
+			}
+		
+			return date;
+			}
 	});
+
+	$('#modificarRegistro').on('show.bs.modal', function (e) {
+		var id = $(e.relatedTarget).data('id');
+		var descripcion = $(e.relatedTarget).data('descripcion');
+		var ingresos = $(e.relatedTarget).data('ingresos');
+		var egresos = $(e.relatedTarget).data('egresos');
+		
+		//console.log(id);
+		$(e.currentTarget).find('input[id="idR"]').val(id);
+		$(e.currentTarget).find('input[id="recipient-descripcion"]').val(descripcion);
+		$(e.currentTarget).find('input[id="recipient-ingreso"]').val(ingresos);
+		$(e.currentTarget).find('input[id="recipient-egreso"]').val(egresos);
+	});
+
 	function showResponse(responseText, statusText, xhr, $form){
 		var res = JSON.parse(responseText);
 		$("#nombreOrden").val(res.nombre);
@@ -312,8 +366,20 @@
   		);*/
 	}
 
-	function modificarRegistro(id){
-		console.log(id);
+	function modificarRegistro(){		
+		console.log("uwu");
+
+		//console.log( $("#idR").val());
+		//console.log( $("#recipient-descripcion").val());
+		//console.log( $("#recipient-ingreso").val());
+		//console.log( $("#recipient-ingreso").val());
+		// ID = $("#idRegistro").val()
+		// Descripcion = $("#recipient-descripcion").val()
+		// Ingresos = $("#recipient-ingreso").val()
+		// Egresos = $("#recipient-ingreso").val()
+
+		// recipient-descripcion
+		// addArea($("#txtAddArea").val(),$("#dirAddArea").val(),0,0);
 		/*
 		var descripcion = $("#descripcion").val();
 		var ingreso = ($("#ingreso").val().split(".")).join("");
