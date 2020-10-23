@@ -20,10 +20,10 @@
 				<input class="form-control" type="text" id="descripcion">
 			</div>
 			<div class="col-4">
-				<input class="form-control" type="number" id="ingreso" onchange="formato('ingreso')">
+				<input class="ingreso" type="text" id="ingreso" onchange="formato('ingreso')">
 			</div>
 			<div class="col-4">
-				<input class="form-control" type="number" id="egreso" onchange="formato('egreso')">
+				<input class="egreso" type="text" id="egreso" onchange="formato('egreso')">
 			</div>
 		</div>
 		<div class="row">
@@ -305,7 +305,7 @@
 
 	function modificarRegistro(id){
 		console.log(id);
-		
+
 		var descripcion = $("#descripcion").val();
 		var ingreso = ($("#ingreso").val().split(".")).join("");
 		var egreso = ($("#egreso").val().split(".")).join("");
@@ -368,6 +368,24 @@
 			nuevoProcedimiento();
 		});
 	}
+
+	const ingreso = document.querySelector('.ingreso');
+	const egreso = document.querySelector('.egreso');
+
+	function formatNumber (n) {
+		n = String(n).replace(/\D/g, "");
+		return n === '' ? n : Number(n).toLocaleString();
+	}
+	ingreso.addEventListener('keyup', (e) => {
+		const element = e.target;
+		const value = element.value;
+	element.value = formatNumber(value);
+	});
+	egreso.addEventListener('keyup', (e) => {
+		const element = e.target;
+		const value = element.value;
+	element.value = formatNumber(value);
+	});
 
 
 </script>
