@@ -331,6 +331,19 @@ class Principal extends CI_Controller {
 		}
 		echo json_encode($info);
 	}
+
+	function modificarRegistro(){
+		$id = $this->input->post("id");
+		$descripcion = $this->input->post("descripcion");
+		$ingreso 	 = $this->input->post("ingreso");
+		$egreso 	 = $this->input->post("egreso");
+		$this->Modelo->modificarRegistro($id,$descripcion,$ingreso,$egreso);
+	}
+
+	function eliminarRegistro(){
+		$id = $this->input->post("id");
+		$this->Modelo->eliminarRegistro($id);
+	}
 }
 
 /* End of file welcome.php */
