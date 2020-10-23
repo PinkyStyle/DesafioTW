@@ -121,7 +121,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-				<input type="submit" class="btn btn-primary" onclick="modificarRegistro()"></button>
+				<input type="submit" class="btn btn-primary" data-dismiss="modal" onclick="modificarRegistro()"></button>
 			</div>
 			</div>
 		</div>
@@ -373,17 +373,29 @@
 		//console.log( $("#recipient-descripcion").val());
 		//console.log( $("#recipient-ingreso").val());
 		//console.log( $("#recipient-ingreso").val());
-		// ID = $("#idRegistro").val()
+		// ID = $("#idR").val()
 		// Descripcion = $("#recipient-descripcion").val()
 		// Ingresos = $("#recipient-ingreso").val()
 		// Egresos = $("#recipient-ingreso").val()
 
 		// recipient-descripcion
 		// addArea($("#txtAddArea").val(),$("#dirAddArea").val(),0,0);
-		/*
-		var descripcion = $("#descripcion").val();
-		var ingreso = ($("#ingreso").val().split(".")).join("");
-		var egreso = ($("#egreso").val().split(".")).join("");
+
+		var id = $("#idR").val();
+		var descripcion = $("#recipient-descripcion").val();
+		var ingreso =  ($("#recipient-ingreso").val().split(".")).join("");
+		var egreso = ($("#recipient-egreso").val().split(".")).join("");
+		
+
+		if(ingreso > 0 && egreso == 0){
+			egreso = "";
+		}
+		else if(egreso > 0 && ingreso == 0){
+			ingreso = "";
+		}
+
+		console.log(ingreso);
+		console.log(egreso);
 
 		var validation = {
 		    isEmailAddress:function(str) {
