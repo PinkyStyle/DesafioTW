@@ -360,11 +360,24 @@ class Modelo extends CI_Model{
 
 
     function modificarRegistro($id,$descripcion, $ingreso, $egreso){
-        $this->db->where('id', $id);
-        $this->db->set('descripcion', $descripcion);
-        $this->db->set('ingreso', $ingreso);
-        $this->db->set('egreso', $egreso);
-        return $this->db->update('registros');
+        $sql = "select * from registros where id = $id;";
+        $res = $this->db->query($sql);
+        $saldo=0;
+        foreach($res->result() as $row){
+            $saldo = $row->saldo - $row->ingreso + $row->egreso;
+        }
+        $saldo= $saldo + $ingreso - $egreso;
+        $sql = "UPDATE registros SET descripcion = '$descripcion', ingreso = $ingreso, egreso = $egreso, saldo = $saldo WHERE id = $id ;";
+        $resultado = $this->db->query($sql);
+        $sql = "select * from registros where registros.id > $id ORDER BY id ;";
+        $res = $this->db->query($sql);
+        foreach($res->result() as $row){
+            $saldo = $saldo + $row->ingreso - $row->egreso;
+            $sql = "UPDATE registros SET fecha = '$row->fecha', descripcion = '$row->descripcion', ingreso = $row->ingreso, egreso = $row->egreso, saldo = $saldo WHERE id = $row->id ;";
+            $this->db->query($sql);
+        }
+        $sql = "UPDATE registros SET fecha = '$row->fecha', descripcion = '$descripcion', ingreso = $ingreso, egreso = $egreso, saldo = $saldo WHERE id = $row->id ;";
+        return $resultado;
     }
 
     function eliminarRegistro($id){
