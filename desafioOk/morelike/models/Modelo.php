@@ -376,7 +376,6 @@ class Modelo extends CI_Model{
             $sql = "UPDATE registros SET fecha = '$row->fecha', descripcion = '$row->descripcion', ingreso = $row->ingreso, egreso = $row->egreso, saldo = $saldo WHERE id = $row->id ;";
             $this->db->query($sql);
         }
-        $sql = "UPDATE registros SET fecha = '$row->fecha', descripcion = '$descripcion', ingreso = $ingreso, egreso = $egreso, saldo = $saldo WHERE id = $row->id ;";
         return $resultado;
     }
 

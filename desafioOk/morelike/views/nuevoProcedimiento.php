@@ -385,14 +385,6 @@
 		var descripcion = $("#recipient-descripcion").val();
 		var ingreso =  ($("#recipient-ingreso").val().split(".")).join("");
 		var egreso = ($("#recipient-egreso").val().split(".")).join("");
-		
-
-		if(ingreso > 0 && egreso == 0){
-			egreso = "";
-		}
-		else if(egreso > 0 && ingreso == 0){
-			ingreso = "";
-		}
 
 		var validation = {
 		    isEmailAddress:function(str) {
@@ -429,10 +421,13 @@
 			fail=1;
 		}
 		if(ingreso.length> 0 && egreso.length > 0){
-			alert("Solo puede ser Ingreso o Egreso!");
-			fail=1;
+			if(!(ingreso==0 || egreso==0)){
+				alert("Solo puede ser Ingreso o Egreso!");
+				fail=1;
+			}
 		}
-
+		console.log(ingreso);
+		console.log(egreso);
 		if(fail == 0){
 			$.post(base_url+"Principal/modificarRegistro",{
 				id:id, descripcion:descripcion, ingreso:ingreso, egreso:egreso
