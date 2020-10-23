@@ -394,9 +394,6 @@
 			ingreso = "";
 		}
 
-		console.log(ingreso);
-		console.log(egreso);
-
 		var validation = {
 		    isEmailAddress:function(str) {
 		        var pattern =/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -443,7 +440,8 @@
 				$("#contenedor").hide('fast');
 	  			nuevoProcedimiento();
 			});
-		}
+		}		
+		$('.modal-backdrop').remove();//Si no modificamos nada, el modal queda abierto (no se porque), esta linea lo cierra si o si
 	}
 
 	function eliminarRegistro(id){
