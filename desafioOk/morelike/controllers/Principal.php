@@ -344,6 +344,18 @@ class Principal extends CI_Controller {
 		$id = $this->input->post("id");
 		$this->Modelo->eliminarRegistro($id);
 	}
+
+	function newInforme(){
+		$result = $this->Modelo->buscarUltimosRegistros();
+		$res['data'] = $result->result();
+		$res['cant'] = $result->num_rows();
+		$ultimo =0;
+ 		foreach ($result->result() as $row) {
+			$ultimo = $row->id;
+		}
+		$res['ultimo'] =$ultimo;
+		$this->load->view("newInforme",$res);
+	}
 }
 
 /* End of file welcome.php */
