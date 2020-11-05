@@ -51,7 +51,8 @@
 			<input type="text" id="from" name="from">
 			<label for="to">Hasta</label>
 			<input type="text" id="to" name="to">
-		</fieldset>
+			<button class="btn btn-success btn-sm" id="filtro" onclick="filtrarPorFecha()">Filtrar</button>
+		</fieldset>		
 	</div>
 
 	<?php if($cant > 0):?>
@@ -80,7 +81,8 @@
 						data-id="<?=$row->id?>"
 						data-descripcion="<?=$row->descripcion?>" 
 						data-ingresos="<?=number_format($row->ingreso,0,",",".")?>" 
-						data-egresos="<?=number_format($row->egreso,0,",",".")?>">Editar</button>						
+						data-egresos="<?=number_format($row->egreso,0,",",".")?>"
+						data-fecha="<?=substr($row->fecha,0,10)?>">Editar</button>						
 					</td>
 					<td>
 						<button class='btn btn-danger btn-sm'  onclick='eliminarRegistro(<?=$row->id?>)'>Eliminar</button>
@@ -106,16 +108,20 @@
 				<form >				
 				<div class="form-group">
 					<input type="hidden" class="form-control" id="idR" >
-					<label for="recipient-descripcion" class="col-form-label">Descripcion:</label>
-					<input type="text" class="form-control" id="recipient-descripcion"  >
+					<label for="descripcion" class="col-form-label">Descripcion:</label>
+					<input type="text" class="form-control" id="mod-descripcion"  >
 				</div>
 				<div class="form-group">
-					<label for="recipient-ingreso" class="col-form-label">Ingresos:</label>
-					<input type="text" class="form-control" id="recipient-ingreso" >
+					<label for="ingreso" class="col-form-label">Ingresos:</label>
+					<input type="text" class="form-control" id="mod-ingreso" >
 				</div>
 				<div class="form-group">
-					<label for="recipient-egreso" class="col-form-label">Egresos:</label>
-					<input type="text" class="form-control" id="recipient-egreso" >
+					<label for="egreso" class="col-form-label">Egresos:</label>
+					<input type="text" class="form-control" id="mod-egreso" >
+				</div>
+				<div class="form-group">
+					<label for="fecha" class="col-form-label">Egresos:</label>
+					<input type="text" class="form-control" id="mod-fecha" >
 				</div>
 				</form>
 			</div>
@@ -192,16 +198,23 @@
 			.on( "change", function() {
 				from.datepicker( "option", "maxDate", getDate( this ) );
 			});
+			fecha = $( "#mod-fecha" ).datepicker({
+				defaultDate: "+1w",
+				changeMonth: true,
+				numberOfMonths: 1
+			})
+			;
 		
 			function getDate( element ) {
-			var date;
-			try {
-				date = $.datepicker.parseDate( dateFormat, element.value );
-			} catch( error ) {
-				date = null;
-			}
-		
-			return date;
+				var date;
+				try {
+					//date = $.datepicker.parseDate( dateFormat, element.value );
+					date = element.value;
+				} catch( error ) {
+					date = null;
+				}
+			
+				return date;
 			}
 	});
 
@@ -210,12 +223,14 @@
 		var descripcion = $(e.relatedTarget).data('descripcion');
 		var ingresos = $(e.relatedTarget).data('ingresos');
 		var egresos = $(e.relatedTarget).data('egresos');
+		var fecha = $(e.relatedTarget).data('fecha');
 		
 		//console.log(id);
 		$(e.currentTarget).find('input[id="idR"]').val(id);
-		$(e.currentTarget).find('input[id="recipient-descripcion"]').val(descripcion);
-		$(e.currentTarget).find('input[id="recipient-ingreso"]').val(ingresos);
-		$(e.currentTarget).find('input[id="recipient-egreso"]').val(egresos);
+		$(e.currentTarget).find('input[id="mod-descripcion"]').val(descripcion);
+		$(e.currentTarget).find('input[id="mod-ingreso"]').val(ingresos);
+		$(e.currentTarget).find('input[id="mod-egreso"]').val(egresos);
+		$(e.currentTarget).find('input[id="mod-fecha"]').val(fecha);
 	});
 
 	function showResponse(responseText, statusText, xhr, $form){
@@ -366,8 +381,27 @@
   		);*/
 	}
 
+	function filtrarPorFecha(){
+		var d = $('#from').datepicker('getDate');
+		var h = $('#to').datepicker('getDate');		
+	
+		var desde = $.datepicker.formatDate('yy-mm-dd',d);
+		var hasta = $.datepicker.formatDate('yy-mm-dd',h);		
+		if(desde != "" && hasta != ""){		
+			$.post(base_url+"Principal/buscarUltimosRegistrosPorFecha",{
+				desde:desde, hasta:hasta
+			},function(){
+				$("#contenedor").hide('fast');							
+				filtrar(desde,hasta); 			
+			});			
+		}
+		else{		
+			$("#contenedor").hide('fast');
+	  		nuevoProcedimiento();	
+		}
+	}
+
 	function modificarRegistro(){		
-		console.log("uwu");
 
 		//console.log( $("#idR").val());
 		//console.log( $("#recipient-descripcion").val());
@@ -382,17 +416,12 @@
 		// addArea($("#txtAddArea").val(),$("#dirAddArea").val(),0,0);
 
 		var id = $("#idR").val();
-		var descripcion = $("#recipient-descripcion").val();
-		var ingreso =  ($("#recipient-ingreso").val().split(".")).join("");
-		var egreso = ($("#recipient-egreso").val().split(".")).join("");
+		var descripcion = $("#mod-descripcion").val();
+		var ingreso =  ($("#mod-ingreso").val().split(".")).join("");
+		var egreso = ($("#mod-egreso").val().split(".")).join("");
+		var fecha = $('#mod-fecha').datepicker('getDate');
 		
-
-		if(ingreso > 0 && egreso == 0){
-			egreso = "";
-		}
-		else if(egreso > 0 && ingreso == 0){
-			ingreso = "";
-		}
+		var fechaFormat = $.datepicker.formatDate('yy-mm-dd',fecha);
 
 		var validation = {
 		    isEmailAddress:function(str) {
@@ -428,14 +457,14 @@
 			alert("Falta registrar Ingreso o Egreso");
 			fail=1;
 		}
-		if(ingreso.length> 0 && egreso.length > 0){
+		if(ingreso.length> 1 && egreso.length > 1 && (ingreso == 0 || egreso == 0)){
 			alert("Solo puede ser Ingreso o Egreso!");
 			fail=1;
 		}
 
 		if(fail == 0){
 			$.post(base_url+"Principal/modificarRegistro",{
-				id:id, descripcion:descripcion, ingreso:ingreso, egreso:egreso
+				id:id, descripcion:descripcion, ingreso:ingreso, egreso:egreso, fecha:fechaFormat
 			},function(){
 				$("#contenedor").hide('fast');
 	  			nuevoProcedimiento();

@@ -176,9 +176,20 @@
 	$(document).ready(function(){
 		});
 	function nuevoProcedimiento(){
-		$.post(base_url+"Principal/nuevoProcedimiento",{},function(html,data){$("#contenedor").html(html,data); $("#contenedor").show("fast"); 
-			$("#rutPacienteBusqueda").focus();
-			//$('html, body').animate({ scrollTop: $("#rutPacienteBusqueda").offset().top }, 500);
+		$.post(base_url+"Principal/nuevoProcedimiento",{
+
+		},function(html,data){
+			$("#contenedor").html(html,data); 
+			$("#contenedor").show("fast"); 
+
+		});
+	}
+	function filtrar(desde,hasta){
+		$.post(base_url+"Principal/buscarUltimosRegistrosPorFecha",{
+				desde:desde, hasta:hasta
+			},function(html,data){
+				$("#contenedor").html(html,data); 
+				$("#contenedor").show("fast"); 						
 
 		});
 	}

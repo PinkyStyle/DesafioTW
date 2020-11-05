@@ -357,13 +357,17 @@ class Modelo extends CI_Model{
         return $this->db->query($sql);
     }
 
+    function buscarUltimosRegistrosPorFecha($desde, $hasta){        
+        $sql = "select * from registros where (fecha > '$desde' and fecha < '$hasta') order by fecha desc limit 10";   
+        return $this->db->query($sql);
+    }
 
-
-    function modificarRegistro($id,$descripcion, $ingreso, $egreso){
+    function modificarRegistro($id,$descripcion, $ingreso, $egreso, $fecha){
         $this->db->where('id', $id);
         $this->db->set('descripcion', $descripcion);
         $this->db->set('ingreso', $ingreso);
         $this->db->set('egreso', $egreso);
+        $this->db->set('fecha', $fecha);
         return $this->db->update('registros');
     }
 
