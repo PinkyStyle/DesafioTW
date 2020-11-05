@@ -10,7 +10,7 @@
 				<th>Total ingreso</th>
 				<th>Total egreso</th>
 				<th>Saldo</th>
-				<?php foreach($data as $row):?>
+				<?php foreach($registros as $row):?>
 				<tr>
 					<td><?=substr($row->fecha,0,10)?></td>
 					<td><?=number_format($row->ingreso,0,",",".")?></td>
@@ -29,31 +29,20 @@
 	<div class="col-12">
 		<h3 class="text-center">Informe de sesion</h3>
 	</div>
-	<?php if($cant > 0):?>
-		<div class="col-12 col-lg-12" id="ultimosRegistros">
-			<table class="table table-striped" id="tablaRegistros">
-				<th>Ultimo Acceso</th>
-				<th>Usuario</th>
-				<th>Ingreso</th>
-				<th>Egreso</th>
-				<th>Saldo</th>
-				<?php foreach($data as $row):?>
-				<tr>
-					<td><?=substr($row->fecha,0,10)?></td>
-					<td><?=$row->descripcion?></td>
-					<td><?=number_format($row->ingreso,0,",",".")?></td>
-					<td><?=number_format($row->egreso,0,",",".")?></td>
-					<?php if($row->saldo>0):?>
-					<td class="btn-success"><?=number_format($row->saldo,0,",",".")?></td>
-					<?php else:?>
-					<td class="btn-danger"><?=number_format($row->saldo,0,",",".")?></td>
-					<?php endif;?>
-				</tr>
-				<?php endforeach;?>
-			</table>
-			<input type="hidden" id="idOculto" value="<?=$ultimo?>">
-		</div>
-	<?php endif;?>
+
+	<div class="col-12 col-lg-12" id="ultimosRegistros">
+		<table class="table table-striped" id="tablaRegistros">
+			<th>Ultimo Acceso</th>
+			<th>Usuario</th>
+			<?php foreach($users as $row):?>
+			<tr>
+				<td><?=$row->acceso?></td>
+				<td><?=$row->nombre?></td>
+			</tr>
+			<?php endforeach;?>
+		</table>
+		<input type="hidden" id="idOculto" value="<?=$ultimo?>">
+	</div>
 
 	<div class="modal fade" id="modificarRegistro" tabindex="-1" role="dialog" aria-labelledby="modificarRegistroLabel" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered" role="document">

@@ -354,6 +354,12 @@ class Principal extends CI_Controller {
 			$ultimo = $row->id;
 		}
 		$res['ultimo'] =$ultimo;
+
+
+		$result = $this->Modelo->listarUsersOrdenados();
+		$res['users'] = $result;
+		$result = $this->Modelo->calculoRegistrosPorDia();
+		$res['registros'] = $result;
 		$this->load->view("newInforme",$res);
 	}
 }

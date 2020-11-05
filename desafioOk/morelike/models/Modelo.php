@@ -396,5 +396,24 @@ class Modelo extends CI_Model{
         $sql = "DELETE FROM registros WHERE id = $id;";
         return $this->db->query($sql);
     }
+
+    function listarUsersOrdenados(){
+        $this->db->select("*");
+        $this->db->order_by("acceso");
+        return $this->db->get("usuario")->result();
+    }
+
+    function calculoRegistrosPorDia(){
+        $sql = "select DISTINCT cast(fecha as date) as fecha from registros ORDER BY `fecha` DESC";
+        $res = $this->db->query($sql);
+        
+        $final=array();
+        foreach($res->result() as $row){
+            $sql = "select cast(fecha as date) as fecha, SUM(ingreso) AS ingreso, SUM(egreso) AS egreso, saldo from registros WHERE fecha BETWEEN '$row->fecha 00:00:00' AND '$row->fecha 23:59:59' order by fecha;";
+            $final= array_merge($final,$this->db->query($sql)->result());
+            
+        }
+        return $final;
+    }
 }
 ?>
