@@ -24,10 +24,10 @@
 				<input class="boton0" type="text" id="descripcion">
 			</div>
 			<div class="col-4">				
-				<input class="boton" type="text" id="ingreso" onchange="formato('ingreso')">
+				<input class="ingreso" type="text" id="ingreso" onchange="formato('ingreso')">
 			</div>
 			<div class="col-4">
-				<input class="boton" type="text" id="egreso" onchange="formato('egreso')">
+				<input class="egreso" type="text" id="egreso" onchange="formato('egreso')">
 			</div>
 		</div>
 
@@ -154,7 +154,12 @@
 		align: center;
 		border:1px solid #ccc;
 	}
-	.boton{
+	.ingreso{
+		width: 90%;
+		justify: center;	
+		border:1px solid #ccc;			
+	}
+	.egreso{
 		width: 90%;
 		justify: center;	
 		border:1px solid #ccc;			
@@ -371,26 +376,6 @@
 			},'json'
 		);
 	}
-	function saveImagen(id,archivo,nombre){
-		$.ajax({
-        	url:base_url+"Principal/saveImagen",
-         	type:"post",
-         	data:{file:archivo, id:id, nombre:nombre},
-         	processData:false,
-         	contentType:false,
-         	cache:false,
-         	async:false,
-  			success: function(data){
-              	alert("Upload Image Successful.");
-           	}
-     	});
-		/*$.post(
-	  		base_url+"Principal/saveImagen",
-	  		{
-	  			id:id, archivo:archivo, nombre:nombre
-	  		}
-  		);*/
-	}
 
 	function filtrarPorFecha(){
 		var d = $('#from').datepicker('getDate');
@@ -494,23 +479,23 @@
 		});
 	}
 
-	const boton = document.querySelector('.boton');
-	// const egreso = document.querySelector('.egreso');
+	const ingreso = document.querySelector('.ingreso');
+	const egreso = document.querySelector('.egreso');
 
 	function formatNumber (n) {
 		n = String(n).replace(/\D/g, "");
 		return n === '' ? n : Number(n).toLocaleString();
 	}
-	boton.addEventListener('keyup', (e) => {
+	ingreso.addEventListener('keyup', (e) => {
 		const element = e.target;
 		const value = element.value;
 	element.value = formatNumber(value);
 	});
-	// egreso.addEventListener('keyup', (e) => {
-	// 	const element = e.target;
-	// 	const value = element.value;
-	// element.value = formatNumber(value);
-	// });
+	egreso.addEventListener('keyup', (e) => {
+		const element = e.target;
+		const value = element.value;
+	element.value = formatNumber(value);
+	});
 
 
 </script>
