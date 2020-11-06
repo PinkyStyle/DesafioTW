@@ -170,7 +170,7 @@ class Modelo extends CI_Model{
         $this->historialIntranet("Tabla: usuario - Cambio de Estado User - Id: ".$id." Estado: ".$estado);
     }
     function listarLinks(){
-        $sql = "select usuario.id as idu, usuario.nombre, usuario.rut, usuario.estado as estadousuario, centro.id as idc, centro.nombre, centro.estado as estadocentro, usce.estado as estadousce, usce.idce from usce join usuario on usuario.id = usce.idus join centro on centro.id = usce.idce order by usuario.nombre, centro.nombre";
+        $sql = "select usuario.id as idu, usuario.nombre, usuario.rut, usuario.estado as estadousuario, centro.id as idc, centro.nombre, centro.estado as estadocentro, usce.estado as estadousce, usce.idce, usce.id as idt from usce join usuario on usuario.id = usce.idus join centro on centro.id = usce.idce order by usuario.nombre, centro.nombre";
         return $this->db->query($sql)->result();
     }
     function buscaLinks(){

@@ -68,16 +68,16 @@
 					</td>					
 					<?php if($row->estadousce == 0):?>
 						<td><i class="far fa-eye fa-2x"></i></td>
-						<td><button class="btn btn-info" onclick="cambiarEstadoUA(1,<?=$row->idc?>)"><i class="far fa-eye-slash"></i></button></td>
+						<td><button class="btn btn-info" onclick="cambiarEstadoUA(1,<?=$row->idt?>)"><i class="far fa-eye-slash"></i></button></td>
 					<?php else:?>
 						<td><i class="far fa-eye-slash fa-2x"></i></td>
-						<td><button class="btn btn-info" onclick="cambiarEstadoUA(0,<?=$row->idc?>)"><i class="far fa-eye"></i></button></td>
+						<td><button class="btn btn-info" onclick="cambiarEstadoUA(0,<?=$row->idt?>)"><i class="far fa-eye"></i></button></td>
 					<?php endif;?>
 					<td>
-						<button class="btn btn-success" onclick="editLink(<?=$row->idc;?>)"><i class="far fa-save"></i></button>
+						<button class="btn btn-success" onclick="editLink(<?=$row->idce;?>)"><i class="far fa-save"></i></button>
 					</td>
 					<td>
-						<button class="btn btn-danger" onclick="deleteLink(<?=$row->idce;?>)"><i class="far fa-trash-alt"></i></button>
+						<button class="btn btn-danger" onclick="deleteLink(<?=$row->id;?>)"><i class="far fa-trash-alt"></i></button>
 					</td>
 				</tr>
 			<?php endforeach;?>

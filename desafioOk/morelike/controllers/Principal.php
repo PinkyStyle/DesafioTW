@@ -171,8 +171,7 @@ class Principal extends CI_Controller {
 		$area 		=$this->input->post("area");
 		$op 		=$this->input->post("op");
 		$id 		=$this->input->post("id");
-		$res['error'] = $this->Modelo->addNewLink($usuario,$area,$op,$id);
-		echo json_encode($res);
+		$this->Modelo->addNewLink($usuario,$area,$op,$id);
 	}
 	function cambiarEstadoLink(){
 		$estado = $this->input->post("estado");

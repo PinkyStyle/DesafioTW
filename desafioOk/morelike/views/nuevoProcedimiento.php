@@ -119,10 +119,6 @@
 					<label for="egreso" class="col-form-label">Egresos:</label>
 					<input type="text" class="form-control" id="mod-egreso" >
 				</div>
-				<!-- <div class="form-group">
-					<label for="fecha" class="col-form-label">Egresos:</label>
-					<input type="text" class="form-control" id="mod-fecha" >
-				</div> -->
 				</form>
 			</div>
 			<div class="modal-footer">
