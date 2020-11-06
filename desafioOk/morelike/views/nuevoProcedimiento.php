@@ -19,15 +19,15 @@
 		</div>
 
 		<!-- Inputs Registros Contables -->
-		<div class="row">
+		<div class="row text-center">
 			<div class="col-4">
-				<input class="form-control" type="text" id="descripcion">
+				<input class="boton0" type="text" id="descripcion">
+			</div>
+			<div class="col-4">				
+				<input class="boton" type="text" id="ingreso" onchange="formato('ingreso')">
 			</div>
 			<div class="col-4">
-				<input class="ingreso" type="text" id="ingreso" onchange="formato('ingreso')">
-			</div>
-			<div class="col-4">
-				<input class="egreso" type="text" id="egreso" onchange="formato('egreso')">
+				<input class="boton" type="text" id="egreso" onchange="formato('egreso')">
 			</div>
 		</div>
 
@@ -147,6 +147,17 @@
 		-webkit-user-select: none;
 		-ms-user-select: none;
 		user-select: none;
+	}
+
+	.boton0{
+		width: 90%;
+		align: center;
+		border:1px solid #ccc;
+	}
+	.boton{
+		width: 90%;
+		justify: center;	
+		border:1px solid #ccc;			
 	}
 
 	.signature-pad {
@@ -485,23 +496,23 @@
 		});
 	}
 
-	const ingreso = document.querySelector('.ingreso');
-	const egreso = document.querySelector('.egreso');
+	const boton = document.querySelector('.boton');
+	// const egreso = document.querySelector('.egreso');
 
 	function formatNumber (n) {
 		n = String(n).replace(/\D/g, "");
 		return n === '' ? n : Number(n).toLocaleString();
 	}
-	ingreso.addEventListener('keyup', (e) => {
+	boton.addEventListener('keyup', (e) => {
 		const element = e.target;
 		const value = element.value;
 	element.value = formatNumber(value);
 	});
-	egreso.addEventListener('keyup', (e) => {
-		const element = e.target;
-		const value = element.value;
-	element.value = formatNumber(value);
-	});
+	// egreso.addEventListener('keyup', (e) => {
+	// 	const element = e.target;
+	// 	const value = element.value;
+	// element.value = formatNumber(value);
+	// });
 
 
 </script>
