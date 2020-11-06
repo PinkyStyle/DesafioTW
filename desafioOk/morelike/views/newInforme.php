@@ -9,17 +9,11 @@
 				<th>Dia</th>
 				<th>Total ingreso</th>
 				<th>Total egreso</th>
-				<th>Saldo</th>
 				<?php foreach($registros as $row):?>
 				<tr>
 					<td><?=substr($row->fecha,0,10)?></td>
 					<td><?=number_format($row->ingreso,0,",",".")?></td>
 					<td><?=number_format($row->egreso,0,",",".")?></td>
-					<?php if($row->saldo>0):?>
-					<td class="btn-success"><?=number_format($row->saldo,0,",",".")?></td>
-					<?php else:?>
-					<td class="btn-danger"><?=number_format($row->saldo,0,",",".")?></td>
-					<?php endif;?>
 				</tr>
 				<?php endforeach;?>
 			</table>
@@ -401,24 +395,6 @@
 			nuevoProcedimiento();
 		});
 	}
-
-	const ingreso = document.querySelector('.ingreso');
-	const egreso = document.querySelector('.egreso');
-
-	function formatNumber (n) {
-		n = String(n).replace(/\D/g, "");
-		return n === '' ? n : Number(n).toLocaleString();
-	}
-	ingreso.addEventListener('keyup', (e) => {
-		const element = e.target;
-		const value = element.value;
-	element.value = formatNumber(value);
-	});
-	egreso.addEventListener('keyup', (e) => {
-		const element = e.target;
-		const value = element.value;
-	element.value = formatNumber(value);
-	});
 
 
 </script>

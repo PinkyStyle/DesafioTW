@@ -399,7 +399,7 @@ class Modelo extends CI_Model{
 
     function listarUsersOrdenados(){
         $this->db->select("*");
-        $this->db->order_by("acceso");
+        $this->db->order_by("acceso", "desc");
         return $this->db->get("usuario")->result();
     }
 
