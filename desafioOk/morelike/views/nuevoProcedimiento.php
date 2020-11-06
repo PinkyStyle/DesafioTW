@@ -119,10 +119,10 @@
 					<label for="egreso" class="col-form-label">Egresos:</label>
 					<input type="text" class="form-control" id="mod-egreso" >
 				</div>
-				<div class="form-group">
+				<!-- <div class="form-group">
 					<label for="fecha" class="col-form-label">Egresos:</label>
 					<input type="text" class="form-control" id="mod-fecha" >
-				</div>
+				</div> -->
 				</form>
 			</div>
 			<div class="modal-footer">
@@ -432,7 +432,7 @@
 		var egreso = ($("#mod-egreso").val().split(".")).join("");
 		var fecha = $('#mod-fecha').datepicker('getDate');
 		
-		var fechaFormat = $.datepicker.formatDate('yy-mm-dd',fecha);
+		//var fechaFormat = $.datepicker.formatDate('Y-m-d H:i:s',fecha);
 
 		var validation = {
 		    isEmailAddress:function(str) {
