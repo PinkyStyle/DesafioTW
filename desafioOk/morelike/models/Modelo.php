@@ -45,21 +45,6 @@ class Modelo extends CI_Model{
         //print_r($res);
         return $res;
     }
-    function savePaciente($rut, $nombre,$apellido,$fNac,$edad,$telefono,$correo,$domicilio){
-        //Se deberá buscar si es paciente nuevo... si es el mismo solo se actalizará la información.
-        $info = array("rut"=>$rut,"nombre"=>$nombre, "apellido"=>$apellido,"fNac"=>$fNac,"edad"=>$edad,"telefono"=>$telefono,"correo"=>$correo,"domicilio"=>$domicilio);
-
-        $this->db->where("rut",$rut);
-        $res = $this->db->get("paciente");
-        if($res->num_rows()>0){
-            //Se actualiza...
-            $this->db->where("rut",$rut);
-            $this->db->update("paciente",$info);
-        }else{
-            //Se crea...
-            $this->db->insert("paciente",$info);
-        }
-    }
     function saveProcedimiento($descripcion, $ingreso, $egreso){
         //Falta calcular el saldo...
         //Saldo será la diferencia entre el saldo anterior +Ingreso -Egreso
@@ -73,37 +58,6 @@ class Modelo extends CI_Model{
         $data = array("descripcion"=>$descripcion,"fecha"=>Date("Y-m-d H:i:s"),"ingreso"=>$ingreso,"egreso"=>$egreso, "saldo"=>$saldo);
         $this->db->insert("registros",$data);
     }
-    function buscarPacienteRut($rut){
-        $this->db->where("rut",$rut);
-        return $this->db->get("paciente")->result();
-    }
-    function buscarPacientes(){
-        $res = $this->db->get("paciente")->result();
-        $result = array();
-        foreach ($res as $row) {
-            array_push($result, $row->rut." ".$row->nombre." ".$row->apellido);
-        }
-        return $result;
-    }
-    function buscarFichasPaciente($rut){
-        $sql = "select ficha.*, usuario.nombre as name, usuario.apellido as lastname, usuario.especialidad from ficha join usce on usce.idus = ficha.idus join usuario on usce.idus = usuario.id where idPaciente = '".$rut."' order by fechahora desc";
-        /*$this->db->where("idPaciente",$rut);
-        $this->db->order_by("fechahora","desc");
-        return $this->db->get("ficha");*/
-        return $this->db->query($sql);
-    }
-    /*function saveFirma($firma){
-        $data = array("firma"=>$firma);
-        $this->db->insert("firmas",$data);
-        return $this->db->insert_id();
-    }
-    function buscaFirma($id){
-        $this->db->where("id",$id);
-        $res = $this->db->get("firmas");
-        foreach ($res->result() as $row) {
-            return $row->firma;
-        }
-    }*/
     function listarAreas(){
         $this->db->select("*");
         $this->db->order_by("estado");
@@ -216,7 +170,7 @@ class Modelo extends CI_Model{
         $this->historialIntranet("Tabla: usuario - Cambio de Estado User - Id: ".$id." Estado: ".$estado);
     }
     function listarLinks(){
-        $sql = "select usuario.id as idu, usuario.nombre, usuario.rut, usuario.estado as estadousuario, centro.id as idc, centro.nombre, centro.estado as estadocentro, usce.estado as estadousce, usce.idce from usce join usuario on usuario.id = usce.idus join centro on centro.id = usce.idce order by usuario.nombre, centro.nombre";
+        $sql = "select usuario.id as idu, usuario.nombre, usuario.rut, usuario.estado as estadousuario, centro.id as idc, centro.nombre, centro.estado as estadocentro, usce.estado as estadousce, usce.idce, usce.id as idt from usce join usuario on usuario.id = usce.idus join centro on centro.id = usce.idce order by usuario.nombre, centro.nombre";
         return $this->db->query($sql)->result();
     }
     function buscaLinks(){
@@ -265,44 +219,6 @@ class Modelo extends CI_Model{
         $this->db->delete("ua");
         $this->historialIntranet("Tabla: ua - Eliminacion de Link ".$id);
     }
-    function subirFichero($idarea,$cadenaArchivos,$fecha,$user, $ubicacion,$para){
-        $data['area'] = $idarea;
-        $data['nombre'] = $cadenaArchivos;
-        $data['fecha'] = Date("Y-m-d H:i:s");
-        $data['user'] = $user;
-        $data['ubicacion'] = $ubicacion;
-        $data['para'] = $para;
-        
-        $this->db->select("*");
-        $this->db->where('area',$idarea);
-        $this->db->where('nombre',$cadenaArchivos);
-        $this->db->where('para',$para);
-        $res = $this->db->get('fichero')->num_rows();
-        if($res == 0){
-            $this->db->insert("fichero",$data);
-            $this->historialIntranet("Tabla: Fichero - Archivo: ".$cadenaArchivos." - Insercion el documento en la ubicacion ".$ubicacion);
-        }
-    }
-    function buscaFicherosSubidos($area){
-        $sql = "select * from fichero where area = ".$area." and (para = 'all' or para = '".$this->session->userdata("rut")."')";
-        return $this->db->query($sql);
-        /*$this->db->select("*");
-        $this->db->where("area",$area);
-        $this->db->where("para",$para);
-        return $this->db->get("fichero");*/
-    }
-    function eliminarFichero($id, $ubicacion,$nombre){
-        $this->historialIntranet("Tabla: Fichero - Archivo: ".$id." - Eliminacion de la ubicación ".$ubicacion);
-        unlink($ubicacion.$nombre);
-        $this->db->where("id",$id);
-        return $this->db->delete("fichero");
-    }
-    function cambiarEstadoFile($estado, $id){
-        $data['estado'] = $estado;
-        $this->db->where("id",$id);
-        $this->db->update('fichero',$data);
-        $this->historialIntranet("Tabla: Fichero - Archivo: ".$id." - Cambio de Estado a ".$estado);
-    }
     function cambiarClave($clave){
         $data['clave'] = md5($clave);
         $this->db->where("rut",$this->session->userdata("rut"));
@@ -315,33 +231,8 @@ class Modelo extends CI_Model{
         $data['accion'] = $accion;
         $this->db->insert("historial",$data);
     }
-    function leerDocumento($id, $area, $nombre){
-        $this->db->select("*");
-        $this->db->where("idarchivo",$id);
-        $this->db->where("usuario",$this->session->userdata("rut"));
-        $res = $this->db->get("archivosleidos")->num_rows();
-        if($res == 0){
-            //Se abrió por primera vez
-            $data['idarchivo'] = $id;
-            $data['area'] = $area;
-            $data['nombre'] = $nombre;
-            $data['usuario'] = $this->session->userdata("rut");
-            $data['fecha'] = Date("Y-m-d H:i:s");
-            $this->db->insert("archivosleidos",$data);
-        }else{
-            //Se actualiza la fecha de apertura
-            $data['fecha'] = Date("Y-m-d H:i:s");
-            $this->db->where("idarchivo",$id);
-            $this->db->where("usuario",$this->session->userdata("rut"));
-            $this->db->update("archivosleidos",$data);
-        }
-    }
-    function buscarLeidos($id){
-        $sql = "select usuario.nombre from usuario join archivosleidos on usuario.rut = archivosleidos.usuario where archivosleidos.idarchivo = ".$id." order by usuario.nombre";
-        return $this->db->query($sql);
-    }
     function rutCompleto($rut){
-        $sql = "select rut from usuario where rut like '".$rut."%'";
+        $sql = "UPDATE registros SET ";
         $res = $this->db->query($sql)->result();
         foreach ($res as $row) {
             return $row->rut;
@@ -355,6 +246,69 @@ class Modelo extends CI_Model{
     function buscarUltimosRegistrosDesde($desde){
         $sql = "select * from registros where id <".$desde." order by fecha desc limit 10";
         return $this->db->query($sql);
+    }
+
+    function buscarUltimosRegistrosPorFecha($desde, $hasta){        
+        $sql = "select * from registros where (fecha > '$desde' and fecha < '$hasta') order by fecha desc limit 10";   
+        return $this->db->query($sql);
+    }
+
+
+    function modificarRegistro($id,$descripcion, $ingreso, $egreso){
+        $sql = "select * from registros where id = $id;";
+        $res = $this->db->query($sql);
+        $saldo=0;
+        foreach($res->result() as $row){
+            $saldo = $row->saldo - $row->ingreso + $row->egreso;
+        }
+        $saldo= $saldo + $ingreso - $egreso;
+        $sql = "UPDATE registros SET descripcion = '$descripcion', ingreso = $ingreso, egreso = $egreso, saldo = $saldo WHERE id = $id ;";
+        $resultado = $this->db->query($sql);
+        $sql = "select * from registros where registros.id > $id ORDER BY id ;";
+        $res = $this->db->query($sql);
+        foreach($res->result() as $row){
+            $saldo = $saldo + $row->ingreso - $row->egreso;
+            $sql = "UPDATE registros SET fecha = '$row->fecha', descripcion = '$row->descripcion', ingreso = $row->ingreso, egreso = $row->egreso, saldo = $saldo WHERE id = $row->id ;";
+            $this->db->query($sql);
+        }
+        return $resultado;
+    }
+
+    function eliminarRegistro($id){
+        $sql = "select * from registros where id = $id;";
+        $res = $this->db->query($sql);
+        $saldo=0;
+        foreach($res->result() as $row){
+            $saldo = $row->saldo - $row->ingreso + $row->egreso;
+        }
+        $sql = "select * from registros where registros.id > $id ORDER BY id ;";
+        $res = $this->db->query($sql);
+        foreach($res->result() as $row){
+            $saldo = $saldo + $row->ingreso - $row->egreso;
+            $sql = "UPDATE registros SET fecha = '$row->fecha', descripcion = '$row->descripcion', ingreso = $row->ingreso, egreso = $row->egreso, saldo = $saldo WHERE id = $row->id ;";
+            $this->db->query($sql);
+        }
+        $sql = "DELETE FROM registros WHERE id = $id;";
+        return $this->db->query($sql);
+    }
+
+    function listarUsersOrdenados(){
+        $this->db->select("*");
+        $this->db->order_by("acceso", "desc");
+        return $this->db->get("usuario")->result();
+    }
+
+    function calculoRegistrosPorDia(){
+        $sql = "select DISTINCT cast(fecha as date) as fecha from registros ORDER BY `fecha` DESC";
+        $res = $this->db->query($sql);
+        
+        $final=array();
+        foreach($res->result() as $row){
+            $sql = "select cast(fecha as date) as fecha, SUM(ingreso) AS ingreso, SUM(egreso) AS egreso, saldo from registros WHERE fecha BETWEEN '$row->fecha 00:00:00' AND '$row->fecha 23:59:59' order by fecha;";
+            $final= array_merge($final,$this->db->query($sql)->result());
+            
+        }
+        return $final;
     }
 }
 ?>

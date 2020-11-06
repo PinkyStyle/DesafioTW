@@ -96,7 +96,7 @@
 					<hr>
 				</div>
 				<div class="col-6">
-					<button class="btn btn-nuevo" style="width: 100%; height: 100px;" onclick="nuevoLink()">
+					<button class="btn btn-nuevo" style="width: 100%; height: 100px;" onclick="nuevoInforme()">
 						<i class="far fa-chart-bar fa-3x"></i>
 					</button>
 					<hr>
@@ -176,9 +176,20 @@
 	$(document).ready(function(){
 		});
 	function nuevoProcedimiento(){
-		$.post(base_url+"Principal/nuevoProcedimiento",{},function(html,data){$("#contenedor").html(html,data); $("#contenedor").show("fast"); 
-			$("#rutPacienteBusqueda").focus();
-			//$('html, body').animate({ scrollTop: $("#rutPacienteBusqueda").offset().top }, 500);
+		$.post(base_url+"Principal/nuevoProcedimiento",{
+
+		},function(html,data){
+			$("#contenedor").html(html,data); 
+			$("#contenedor").show("fast"); 
+
+		});
+	}
+	function filtrar(desde,hasta){
+		$.post(base_url+"Principal/buscarUltimosRegistrosPorFecha",{
+				desde:desde, hasta:hasta
+			},function(html,data){
+				$("#contenedor").html(html,data); 
+				$("#contenedor").show("fast"); 						
 
 		});
 	}
@@ -190,6 +201,9 @@
 	}
 	function nuevoLink(){
 		$.post(base_url+"Principal/newLink",{},function(html,data){$("#contenedor").html(html,data); $("#contenedor").show("fast");});
+	}
+	function nuevoInforme(){
+		$.post(base_url+"Principal/newInforme",{},function(html,data){$("#contenedor").html(html,data); $("#contenedor").show("fast");});
 	}
 	function entrarArea(){
 		var centro = $("#selectCentros").val();
