@@ -234,15 +234,12 @@
 		var id = $(e.relatedTarget).data('id');
 		var descripcion = $(e.relatedTarget).data('descripcion');
 		var ingresos = $(e.relatedTarget).data('ingresos');
-		var egresos = $(e.relatedTarget).data('egresos');
-		var fecha = $(e.relatedTarget).data('fecha');
-		
-		//console.log(id);
+		var egresos = $(e.relatedTarget).data('egresos');		
+				
 		$(e.currentTarget).find('input[id="idR"]').val(id);
 		$(e.currentTarget).find('input[id="mod-descripcion"]').val(descripcion);
 		$(e.currentTarget).find('input[id="mod-ingreso"]').val(ingresos);
-		$(e.currentTarget).find('input[id="mod-egreso"]').val(egresos);
-		$(e.currentTarget).find('input[id="mod-fecha"]').val(fecha);
+		$(e.currentTarget).find('input[id="mod-egreso"]').val(egresos);		
 	});
 
 	function showResponse(responseText, statusText, xhr, $form){
@@ -408,9 +405,9 @@
 		// addArea($("#txtAddArea").val(),$("#dirAddArea").val(),0,0);
 
 		var id = $("#idR").val();
-		var descripcion = $("#recipient-descripcion").val();
-		var ingreso =  ($("#recipient-ingreso").val().split(".")).join("");
-		var egreso = ($("#recipient-egreso").val().split(".")).join("");
+		var descripcion = $("#mod-descripcion").val();
+		var ingreso =  ($("#mod-ingreso").val().split(".")).join("");
+		var egreso = ($("#mod-egreso").val().split(".")).join("");
 
 		var validation = {
 		    isEmailAddress:function(str) {
@@ -454,7 +451,7 @@
 		console.log(egreso);
 		if(fail == 0){
 			$.post(base_url+"Principal/modificarRegistro",{
-				id:id, descripcion:descripcion, ingreso:ingreso, egreso:egreso, fecha:fechaFormat
+				id:id, descripcion:descripcion, ingreso:ingreso, egreso:egreso
 			},function(){
 				$("#contenedor").hide('fast');
 	  			nuevoProcedimiento();

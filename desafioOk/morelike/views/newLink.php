@@ -77,7 +77,7 @@
 						<button class="btn btn-success" onclick="editLink(<?=$row->idce;?>)"><i class="far fa-save"></i></button>
 					</td>
 					<td>
-						<button class="btn btn-danger" onclick="deleteLink(<?=$row->id;?>)"><i class="far fa-trash-alt"></i></button>
+						<button class="btn btn-danger" onclick="deleteLink(<?=$row->idce;?>)"><i class="far fa-trash-alt"></i></button>
 					</td>
 				</tr>
 			<?php endforeach;?>

@@ -215,6 +215,22 @@ class Principal extends CI_Controller {
 		$this->Modelo->eliminarRegistro($id);
 	}
 
+	function buscarUltimosRegistrosPorFecha(){
+		$desde = $this->input->post("desde");
+		$hasta = $this->input->post("hasta");
+		$result = $this->Modelo->buscarUltimosRegistrosPorFecha($desde,$hasta);		
+		
+		$res['data'] = $result->result();
+		$res['cant'] = $result->num_rows();
+		$ultimo =0;
+ 		foreach ($result->result() as $row) {
+			$ultimo = $row->id;
+		}
+		$res['ultimo'] =$ultimo;
+		$this->load->view("nuevoProcedimiento",$res);
+
+	}
+
 	function newInforme(){
 		$result = $this->Modelo->buscarUltimosRegistros();
 		$res['data'] = $result->result();
