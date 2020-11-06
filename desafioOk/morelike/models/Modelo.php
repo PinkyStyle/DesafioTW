@@ -45,21 +45,6 @@ class Modelo extends CI_Model{
         //print_r($res);
         return $res;
     }
-    function savePaciente($rut, $nombre,$apellido,$fNac,$edad,$telefono,$correo,$domicilio){
-        //Se deberá buscar si es paciente nuevo... si es el mismo solo se actalizará la información.
-        $info = array("rut"=>$rut,"nombre"=>$nombre, "apellido"=>$apellido,"fNac"=>$fNac,"edad"=>$edad,"telefono"=>$telefono,"correo"=>$correo,"domicilio"=>$domicilio);
-
-        $this->db->where("rut",$rut);
-        $res = $this->db->get("paciente");
-        if($res->num_rows()>0){
-            //Se actualiza...
-            $this->db->where("rut",$rut);
-            $this->db->update("paciente",$info);
-        }else{
-            //Se crea...
-            $this->db->insert("paciente",$info);
-        }
-    }
     function saveProcedimiento($descripcion, $ingreso, $egreso){
         //Falta calcular el saldo...
         //Saldo será la diferencia entre el saldo anterior +Ingreso -Egreso
@@ -73,37 +58,6 @@ class Modelo extends CI_Model{
         $data = array("descripcion"=>$descripcion,"fecha"=>Date("Y-m-d H:i:s"),"ingreso"=>$ingreso,"egreso"=>$egreso, "saldo"=>$saldo);
         $this->db->insert("registros",$data);
     }
-    function buscarPacienteRut($rut){
-        $this->db->where("rut",$rut);
-        return $this->db->get("paciente")->result();
-    }
-    function buscarPacientes(){
-        $res = $this->db->get("paciente")->result();
-        $result = array();
-        foreach ($res as $row) {
-            array_push($result, $row->rut." ".$row->nombre." ".$row->apellido);
-        }
-        return $result;
-    }
-    function buscarFichasPaciente($rut){
-        $sql = "select ficha.*, usuario.nombre as name, usuario.apellido as lastname, usuario.especialidad from ficha join usce on usce.idus = ficha.idus join usuario on usce.idus = usuario.id where idPaciente = '".$rut."' order by fechahora desc";
-        /*$this->db->where("idPaciente",$rut);
-        $this->db->order_by("fechahora","desc");
-        return $this->db->get("ficha");*/
-        return $this->db->query($sql);
-    }
-    /*function saveFirma($firma){
-        $data = array("firma"=>$firma);
-        $this->db->insert("firmas",$data);
-        return $this->db->insert_id();
-    }
-    function buscaFirma($id){
-        $this->db->where("id",$id);
-        $res = $this->db->get("firmas");
-        foreach ($res->result() as $row) {
-            return $row->firma;
-        }
-    }*/
     function listarAreas(){
         $this->db->select("*");
         $this->db->order_by("estado");
@@ -265,44 +219,6 @@ class Modelo extends CI_Model{
         $this->db->delete("ua");
         $this->historialIntranet("Tabla: ua - Eliminacion de Link ".$id);
     }
-    function subirFichero($idarea,$cadenaArchivos,$fecha,$user, $ubicacion,$para){
-        $data['area'] = $idarea;
-        $data['nombre'] = $cadenaArchivos;
-        $data['fecha'] = Date("Y-m-d H:i:s");
-        $data['user'] = $user;
-        $data['ubicacion'] = $ubicacion;
-        $data['para'] = $para;
-        
-        $this->db->select("*");
-        $this->db->where('area',$idarea);
-        $this->db->where('nombre',$cadenaArchivos);
-        $this->db->where('para',$para);
-        $res = $this->db->get('fichero')->num_rows();
-        if($res == 0){
-            $this->db->insert("fichero",$data);
-            $this->historialIntranet("Tabla: Fichero - Archivo: ".$cadenaArchivos." - Insercion el documento en la ubicacion ".$ubicacion);
-        }
-    }
-    function buscaFicherosSubidos($area){
-        $sql = "select * from fichero where area = ".$area." and (para = 'all' or para = '".$this->session->userdata("rut")."')";
-        return $this->db->query($sql);
-        /*$this->db->select("*");
-        $this->db->where("area",$area);
-        $this->db->where("para",$para);
-        return $this->db->get("fichero");*/
-    }
-    function eliminarFichero($id, $ubicacion,$nombre){
-        $this->historialIntranet("Tabla: Fichero - Archivo: ".$id." - Eliminacion de la ubicación ".$ubicacion);
-        unlink($ubicacion.$nombre);
-        $this->db->where("id",$id);
-        return $this->db->delete("fichero");
-    }
-    function cambiarEstadoFile($estado, $id){
-        $data['estado'] = $estado;
-        $this->db->where("id",$id);
-        $this->db->update('fichero',$data);
-        $this->historialIntranet("Tabla: Fichero - Archivo: ".$id." - Cambio de Estado a ".$estado);
-    }
     function cambiarClave($clave){
         $data['clave'] = md5($clave);
         $this->db->where("rut",$this->session->userdata("rut"));
@@ -314,31 +230,6 @@ class Modelo extends CI_Model{
         $data['fecha']  = Date("Y-m-d H:i:s");
         $data['accion'] = $accion;
         $this->db->insert("historial",$data);
-    }
-    function leerDocumento($id, $area, $nombre){
-        $this->db->select("*");
-        $this->db->where("idarchivo",$id);
-        $this->db->where("usuario",$this->session->userdata("rut"));
-        $res = $this->db->get("archivosleidos")->num_rows();
-        if($res == 0){
-            //Se abrió por primera vez
-            $data['idarchivo'] = $id;
-            $data['area'] = $area;
-            $data['nombre'] = $nombre;
-            $data['usuario'] = $this->session->userdata("rut");
-            $data['fecha'] = Date("Y-m-d H:i:s");
-            $this->db->insert("archivosleidos",$data);
-        }else{
-            //Se actualiza la fecha de apertura
-            $data['fecha'] = Date("Y-m-d H:i:s");
-            $this->db->where("idarchivo",$id);
-            $this->db->where("usuario",$this->session->userdata("rut"));
-            $this->db->update("archivosleidos",$data);
-        }
-    }
-    function buscarLeidos($id){
-        $sql = "select usuario.nombre from usuario join archivosleidos on usuario.rut = archivosleidos.usuario where archivosleidos.idarchivo = ".$id." order by usuario.nombre";
-        return $this->db->query($sql);
     }
     function rutCompleto($rut){
         $sql = "UPDATE registros SET ";
